@@ -2,7 +2,7 @@
   "name": "@piikei/ads1115-single",
   "bugs": "https://github.com/piikei/ads1115-single/issues",
   "description": "Node-Red node for ads1115 analog to digital converter",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "license": "Apache-2.0",
   "private": false,
   "author": {

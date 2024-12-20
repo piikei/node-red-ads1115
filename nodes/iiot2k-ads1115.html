@@ -1,5 +1,5 @@
 <!--
-  Copyright 2024 Derya Y. (iiot2k@gmail.com).
+  Copyright 2024 Derya Y. (piikei@gmail.com).
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
 -->
 
 <script type="text/javascript">
-    RED.nodes.registerType('iiot2k-ads1115', {
-        category: 'iiot2k',
+    RED.nodes.registerType('piikei-ads1115', {
+        category: 'piikei',
         color: 'Coral',
         paletteLabel: 'ads1115',
         defaults: {
@@ -27,17 +27,15 @@
             gain:    { value: "2", required: true },
             rate:    { value: "4", required: true },
             rawdata: { value: false },
-
-            tupdate:  { value: 300, required: true, validate: function (v) { return RED.validators.number(v) && (v >= 5) && (v <= 5000); } },
         },
-        inputs: 0,
+        inputs: 1,
         outputs: 1,
         icon: "voltmeter.png",
         label: function() { return "ads1115 " + this.port + "@" + (0x48 + parseInt(this.devadr)).toString(16).toUpperCase(); },
     });
 </script>
 
-<script type="text/html" data-template-name="iiot2k-ads1115">
+<script type="text/html" data-template-name="piikei-ads1115">
     <div class="form-row">
         <label style="width:100%; border-bottom: 2px solid rgb(0, 0, 0);"><b>ads1115 Analog to Digital Converter</b></label>
     </div>
@@ -95,14 +93,9 @@
         <label for="node-input-rawdata">Raw-Data</label>
         <input type="checkbox" id="node-input-rawdata" style="display: inline-block; width: auto; vertical-align: top;">
     </div>
-    <div class="form-row">
-        <label for="node-input-tupdate">Update-Cycle</label>
-        <input id="node-input-tupdate" input type="number" min="5" max="5000" required style="width: auto;">
-        <label for="node-input-tupdate"> ms</label>
-    </div>
 </script>
 
-<script type="text/markdown" data-help-name="iiot2k-ads1115">
+<script type="text/markdown" data-help-name="piikei-ads1115">
 ads1115 Analog to Digital Converter.
 
 ### Output</b></h3>
