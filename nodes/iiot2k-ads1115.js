@@ -47,22 +47,19 @@ module.exports = function(RED) {
 
         node.name = "ads1115 " + node.port + "@" + (0x48 + node.devadr).toString(16).toUpperCase();
 
-        syslib.setStatus(node, node.mux_txt, "grey");
-
         node.on('input', (msg) => {
             adc.read(node.port, node.devadr, node.mux, node.gain, node.rate, node.rawdata, 
             (data) => {
                 if (data === undefined)
                     syslib.outError(node, adc.error_text());
                 else {
-                    node.send({ payload: data, topic: node.name });
-                    syslib.setStatus(node, node.mux_txt + data);
+                    const outputMsg = { 
+                        ...msg, // Behalte die ursprünglichen Message-Inhalte
+                        payload: data
+                    };
+                    node.send(outputMsg); // Sende die aktualisierte Message
                 }
             })
-        });
-
-        node.on('close', () => {
-            clearInterval(node.id_interval);
         });
     });
 }
