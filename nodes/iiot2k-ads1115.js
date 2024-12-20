@@ -23,7 +23,7 @@ module.exports = function(RED) {
     if (adc === undefined)
         throw new Error("driver error @iiot2k/ads1115");
 
-    RED.nodes.registerType("iiot2k-ads1115", function(n) {
+    RED.nodes.registerType("piikei-ads1115", function(n) {
         var node = this;
         RED.nodes.createNode(node, n);
 
@@ -33,8 +33,6 @@ module.exports = function(RED) {
         node.gain = parseInt(n.gain);
         node.rate = parseInt(n.rate);
         node.rawdata = n.rawdata;
-
-        node.tupdate = n.tupdate;
 
         switch(n.mux) {
             case "0": node.mux = adc.MUX_I0_I1; node.mux_txt = "A0-A1: "; break; 
@@ -47,32 +45,21 @@ module.exports = function(RED) {
             case "7": node.mux = adc.MUX_I3_GND; node.mux_txt = "A3: "; break; 
         }
 
-        node.onwork = false;
         node.name = "ads1115 " + node.port + "@" + (0x48 + node.devadr).toString(16).toUpperCase();
 
         syslib.setStatus(node, node.mux_txt, "grey");
 
-        node.id_interval = setInterval(() => {
-            if (node.onwork)
-                return;
-
-            node.onwork = true;
-
+        node.on('input', (msg) => {
             adc.read(node.port, node.devadr, node.mux, node.gain, node.rate, node.rawdata, 
             (data) => {
                 if (data === undefined)
                     syslib.outError(node, adc.error_text());
-                else if (data !== node.preval) {
-                    node.preval = data;
+                else {
                     node.send({ payload: data, topic: node.name });
                     syslib.setStatus(node, node.mux_txt + data);
                 }
-                else
-                    syslib.setStatus(node, node.mux_txt + data);
-
-                node.onwork = false;
             })
-        }, node.tupdate);
+        });
 
         node.on('close', () => {
             clearInterval(node.id_interval);

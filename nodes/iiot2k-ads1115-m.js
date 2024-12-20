@@ -23,7 +23,7 @@ module.exports = function(RED) {
     if (adc === undefined)
         throw new Error("driver error @iiot2k/ads1115");
 
-    RED.nodes.registerType("iiot2k-ads1115-m", function(n) {
+    RED.nodes.registerType("piikei-ads1115-m", function(n) {
         var node = this;
         RED.nodes.createNode(node, n);
 
