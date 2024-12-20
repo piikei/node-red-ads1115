@@ -1,0 +1,120 @@
+<!--
+  Copyright 2024 Derya Y. (iiot2k@gmail.com).
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/javascript">
+    RED.nodes.registerType('iiot2k-ads1115', {
+        category: 'iiot2k',
+        color: 'Coral',
+        paletteLabel: 'ads1115',
+        defaults: {
+            port:     { value: 1, required: true, validate: function (v) { return RED.validators.number(v) && (v >= 0) && (v <= 9); } },
+            devadr:   { value: "0", required: true },
+
+            mux:     { value: "4", required: true },
+            gain:    { value: "2", required: true },
+            rate:    { value: "4", required: true },
+            rawdata: { value: false },
+
+            tupdate:  { value: 300, required: true, validate: function (v) { return RED.validators.number(v) && (v >= 5) && (v <= 5000); } },
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: "voltmeter.png",
+        label: function() { return "ads1115 " + this.port + "@" + (0x48 + parseInt(this.devadr)).toString(16).toUpperCase(); },
+    });
+</script>
+
+<script type="text/html" data-template-name="iiot2k-ads1115">
+    <div class="form-row">
+        <label style="width:100%; border-bottom: 2px solid rgb(0, 0, 0);"><b>ads1115 Analog to Digital Converter</b></label>
+    </div>
+    <div class="form-row">
+        <label for="node-input-port">I2C-Port</label>
+        <input id="node-input-port" title="I2C Port" value=1 input type="number" min="0" max="9" required style="width: auto;">
+    </div>
+    <div class="form-row">
+        <label for="node-input-devadr">I2C-Address</label>
+        <select type="text" id="node-input-devadr" style="width: auto;">
+            <option value="0">48H</option>
+            <option value="1">49H</option>
+            <option value="2">4AH</option>
+            <option value="3">4BH</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-mux">Input-Mux</label>
+        <select type="text" id="node-input-mux" style="width: auto;">
+            <option value="0">A0 - A1</option>
+            <option value="1">A0 - A3</option>
+            <option value="2">A1 - A3</option>
+            <option value="3">A2 - A3</option>
+            <option value="4">A0 - GND</option>
+            <option value="5">A1 - GND</option>
+            <option value="6">A2 - GND</option>
+            <option value="7">A3 - GND</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-gain">Input-Gain</label>
+        <select type="text" id="node-input-gain" style="width: auto;">
+            <option value="0">6144mV</option>
+            <option value="1">4096mV</option>
+            <option value="2">2048mV</option>
+            <option value="3">1024mV</option>
+            <option value="4">512mV</option>
+            <option value="5">256mV</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-rate">Rate</label>
+        <select type="text" id="node-input-rate" style="width: auto;">
+            <option value="0">8 SPS</option>
+            <option value="1">16 SPS</option>
+            <option value="2">32 SPS</option>
+            <option value="3">64 SPS</option>
+            <option value="4">128 SPS</option>
+            <option value="5">250 SPS</option>
+            <option value="6">475 SPS</option>
+            <option value="7">860 SPS</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-rawdata">Raw-Data</label>
+        <input type="checkbox" id="node-input-rawdata" style="display: inline-block; width: auto; vertical-align: top;">
+    </div>
+    <div class="form-row">
+        <label for="node-input-tupdate">Update-Cycle</label>
+        <input id="node-input-tupdate" input type="number" min="5" max="5000" required style="width: auto;">
+        <label for="node-input-tupdate"> ms</label>
+    </div>
+</script>
+
+<script type="text/markdown" data-help-name="iiot2k-ads1115">
+ads1115 Analog to Digital Converter.
+
+### Output</b></h3>
+
+: *payload* (number) : adc value
+: *topic* (string) : port and address
+
+### Details
+
+Reads on cycle ads1115 analog input
+and sends as number to output.<br>
+The output value is mV or adc raw data.<br>
+Input voltages to ground 
+gets only positive values.<br>
+</script>
